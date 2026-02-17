@@ -12,7 +12,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthenticationGuard } from './authentication/guards/authentication/authentication.guard';
 import { AccessTokenGuard } from './authentication/guards/access-token/access-token.guard';
 import { RolesGuard } from './authorization/guards/roles/roles.guard';
-import { PermissionsGuard } from './authorization/guards/permissions/permissions.guard';
+import { PolicyHandlersStorage } from './authorization/policies/policy-handlers.storage';
+import { FrameworkContributorPolicyHandler } from './authorization/policies/framework-contributor.policy';
+import { PoliciesGuard } from './authorization/guards/policies/policies.guard';
 
 @Module({
   imports: [
@@ -31,10 +33,12 @@ import { PermissionsGuard } from './authorization/guards/permissions/permissions
     },
     {
       provide: APP_GUARD,
-      useClass: PermissionsGuard, //RolesGuard,
+      useClass: PoliciesGuard,
     },
     AccessTokenGuard,
     AuthenticationService,
+    PolicyHandlersStorage,
+    FrameworkContributorPolicyHandler,
   ],
   controllers: [AuthenticationController],
 })
